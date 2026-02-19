@@ -27,7 +27,7 @@
             touch-action: none;
         }
 
-        /* ===== GOOGLE SIGN-IN SCREEN (UPDATED FOR BETTER CENTERING) ===== */
+        /* ===== GOOGLE SIGN-IN SCREEN ===== */
         #signInScreen {
             position: fixed;
             top: 0;
@@ -35,36 +35,34 @@
             width: 100%;
             height: 100%;
             z-index: 1001; 
-            display: flex; /* Flexbox का उपयोग करके सेंटरिंग */
-            justify-content: center; /* Horizontally सेंटर */
-            align-items: center; /* Vertically सेंटर */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             padding: 20px;
         }
 
-        /* ===== नया कंटेनर जो साइन-इन एलिमेंट्स को ग्रुप करेगा ===== */
         .signin-container {
             display: flex;
-            flex-direction: column; /* एलिमेंट्स को ऊपर से नीचे रखें */
-            align-items: center;   /* सभी एलिमेंट्स को बीच में रखें */
-            gap: 25px;             /* एलिमेंट्स के बीच में स्पेस */
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.1); /* हल्का सा बैकग्राउंड */
-            border-radius: 25px; /* गोल किनारे */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .signin-text {
-            font-size: 20px; /* थोड़ा छोटा फ़ॉन्ट */
+            font-size: 20px;
             color: white;
             text-shadow: 0 2px 5px rgba(0,0,0,0.4);
             text-align: center;
         }
         
-        /* ===== WELCOME IMAGE (UPDATED FOR SIGN-IN SCREEN) ===== */
         .welcome-image {
             width: 85%;
-            max-width: 300px; /* मोबाइल के लिए मैक्स विड्थ सेट करें */
+            max-width: 300px;
             height: auto;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
@@ -73,16 +71,12 @@
         }
 
         @keyframes imageFloat {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
         #googleSignInButton {
-             transform: scale(1.1); /* बटन को थोड़ा बड़ा किया */
+             transform: scale(1.1);
         }
 
         /* ===== WELCOME SCREEN ===== */
@@ -99,9 +93,308 @@
             align-items: center;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             padding: 20px;
-            gap: 40px; /* इमेज और बटन के बीच स्पेस */
+            gap: 40px;
         }
 
+        #welcomeScreen.hidden {
+            display: none;
+        }
+        
+        /* ===== ANIMATED PLAY BUTTON ===== */
+        .play-button {
+            padding: 20px 60px;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%);
+            border: 6px solid #ff1493;
+            border-radius: 60px;
+            box-shadow: 0 15px 40px rgba(255, 20, 147, 0.6), inset 0 3px 15px rgba(255,255,255,0.5);
+            cursor: pointer;
+            animation: playButtonPulse 2s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .play-button:active { transform: scale(0.95); }
+
+        /* ===== MAIN APP SCREEN ===== */
+        #mainScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+        }
+
+        #mainScreen.active {
+            display: block;
+        }
+        
+        /* ===== नया Logout बटन ===== */
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%);
+            border: 3px solid #d6006e;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: white;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+        .logout-button:active {
+            transform: scale(0.9);
+        }
+
+
+        /* ===== VIDEO CONTAINER ===== */
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .tom-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .tom-video.active {
+            display: block;
+            z-index: 1;
+        }
+        
+        /* ...बाकी CSS पहले जैसा ही रहेगा... */
+        .tap-zone { position: absolute; z-index: 5; border-radius: 50%; cursor: pointer; }
+        .tap-zone-head { top: 15%; left: 50%; transform: translateX(-50%); width: 150px; height: 150px; }
+        .tap-zone-body { top: 40%; left: 50%; transform: translateX(-50%); width: 180px; height: 200px; border-radius: 40%; }
+        .tap-zone-feet { bottom: 25%; left: 50%; transform: translateX(-50%); width: 200px; height: 100px; border-radius: 50%; }
+        .control-panel { position: absolute; bottom: 30px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 40px; z-index: 10; padding: 0 20px; }
+        .action-button { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%); border: 5px solid #d6006e; box-shadow: 0 10px 30px rgba(255, 20, 147, 0.6), inset 0 3px 10px rgba(255,255,255,0.5); cursor: pointer; position: relative; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; font-size: 42px; }
+        .action-button:active { transform: scale(0.9); }
+        .btn-laughing { background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); border-color: #d97706; }
+        .btn-mic { width: 90px; height: 90px; background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%); border-color: #d6006e; font-size: 0; }
+        .btn-mic::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 20px; height: 30px; background: white; border-radius: 10px 10px 0 0; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .btn-mic::after { content: ''; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 2px; height: 15px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .mic-button-base { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: white; border-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .btn-mic.listening { animation: pulseMic 1.5s ease-in-out infinite; background: linear-gradient(180deg, #a78bfa 0%, #8b5cf6 100%); border-color: #7c3aed; }
+        @keyframes pulseMic { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .btn-mic.speaking { animation: glowMic 0.8s ease-in-out infinite; background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); border-color: #d97706; }
+        .btn-music { background: linear-gradient(180deg, #a78bfa 0%, #8b5cf6 100%); border-color: #7c3aed; }
+        .status-text { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold; color: white; background: rgba(0,0,0,0.5); padding: 10px 25px; border-radius: 20px; opacity: 0; transition: opacity 0.3s ease; z-index: 100; }
+        .status-text.show { opacity: 1; }
+        .exit-dialog { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .exit-dialog.show { display: flex; }
+        .exit-dialog-box { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 300px; }
+        .exit-dialog-text { font-size: 22px; margin-bottom: 20px; }
+        .exit-dialog-buttons { display: flex; gap: 20px; justify-content: center; }
+        .exit-btn { padding: 10px 30px; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; }
+        .exit-btn-yes { background: #ff4d4d; color: white; }
+        .exit-btn-no { background: #ddd; color: black; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 600px) { .action-button { width: 70px; height: 70px; } .btn-mic { width: 80px; height: 80px; } .control-panel { gap: 25px; bottom: 20px; } }
+    </style>
+</head>
+<body>
+    
+    <div id="signInScreen">
+        <div class="signin-container">
+            <img src="tom_welcome.jpg" alt="Welcome Rabbit" class="welcome-image">
+            <div class="signin-text">Sign in to play with Rabbit!</div>
+            <div id="googleSignInButton"></div>
+        </div>
+    </div>
+
+    <div id="welcomeScreen">
+        <img src="tom_welcome.jpg" alt="Welcome" class="welcome-image">
+        <button class="play-button" id="enterBtn">▶ Play</button>
+    </div>
+
+    <div id="mainScreen">
+        <!-- यहाँ नया Logout बटन जोड़ा गया है -->
+        <button id="logoutBtn" class="logout-button">⏻</button>
+
+        <div class="status-text" id="statusText">Ready</div>
+        
+        <div class="video-container" id="videoContainer">
+            <video id="videoStanding" class="tom-video active" playsinline muted loop preload="auto"><source src="tom_standing.mp4" type="video/mp4"></video>
+            <video id="videoListening" class="tom-video" playsinline muted preload="auto"><source src="tom_listing.mp4" type="video/mp4"></video>
+            <video id="videoTalking" class="tom-video" playsinline muted preload="auto"><source src="tom_talking.mp4" type="video/mp4"></video>
+            <video id="videoLaughing" class="tom-video" playsinline muted preload="auto"><source src="laughing.mp4" type="video/mp4"></video>
+            <video id="videoMusic" class="tom-video" playsinline muted preload="auto"><source src="music.mp4" type="video/mp4"></video>
+
+            <div class="tap-zone tap-zone-head"></div>
+            <div class="tap-zone tap-zone-body"></div>
+            <div class="tap-zone tap-zone-feet"></div>
+        </div>
+
+        <div class="control-panel">
+            <button class="action-button btn-laughing" id="laughingBtn">😄</button>
+            <button class="action-button btn-mic" id="micBtn">
+                 <div class="mic-button-base"></div>
+            </button>
+            <button class="action-button btn-music" id="musicBtn">🎵</button>
+        </div>
+    </div>
+
+    <div class="exit-dialog" id="exitDialog">
+        <div class="exit-dialog-box">
+            <div class="exit-dialog-text">Do you want to exit?</div>
+            <div class="exit-dialog-buttons">
+                <button class="exit-btn exit-btn-yes" id="exitYesBtn">Yes</button>
+                <button class="exit-btn exit-btn-no" id="exitNoBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioLaughing" src="laughing.wav" preload="auto"></audio>
+    <audio id="audioMusic" src="music.wav" preload="auto"></audio>
+
+    <script>
+        // DOM ELEMENTS
+        const signInScreen = document.getElementById('signInScreen');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const mainScreen = document.getElementById('mainScreen');
+        const googleSignInButton = document.getElementById('googleSignInButton');
+        const enterBtn = document.getElementById('enterBtn');
+        const logoutBtn = document.getElementById('logoutBtn'); // Logout बटन को पकड़ा
+        const exitDialog = document.getElementById('exitDialog');
+        const exitYesBtn = document.getElementById('exitYesBtn');
+        const exitNoBtn = document.getElementById('exitNoBtn');
+        // ... अन्य DOM elements पहले जैसे ही रहेंगे
+
+        const AppState = { WELCOME: 'welcome', IDLE: 'idle', LISTENING: 'listening', TALKING: 'talking', LAUGHING: 'laughing', MUSIC: 'music' };
+        let currentState = AppState.WELCOME;
+        // ... बाकी वेरिएबल्स
+
+        // ===== नया Logout फंक्शन =====
+        function handleLogout() {
+            console.log("User logging out...");
+            localStorage.removeItem('hasSignedIn'); // सबसे जरूरी: लॉगिन की जानकारी हटाना
+            mainScreen.classList.remove('active');
+            signInScreen.style.display = 'flex';
+            signInScreen.style.opacity = '1';
+            welcomeScreen.classList.add('hidden');
+            currentState = AppState.WELCOME;
+        }
+
+
+        // GOOGLE SIGN-IN LOGIC
+        function handleSignIn(response) {
+            console.log("Google Sign-In Successful:", response);
+            localStorage.setItem('hasSignedIn', 'true');
+            signInScreen.style.transition = 'opacity 0.5s ease';
+            signInScreen.style.opacity = '0';
+            setTimeout(() => {
+                signInScreen.style.display = 'none';
+                welcomeScreen.style.display = 'flex';
+                welcomeScreen.classList.remove('hidden');
+                welcomeScreen.classList.add('fade-in');
+            }, 500);
+        }
+
+        window.onload = function () {
+            if (localStorage.getItem('hasSignedIn') === 'true') {
+                signInScreen.style.display = 'none';
+                welcomeScreen.style.display = 'flex';
+                welcomeScreen.classList.remove('hidden');
+            } else {
+                welcomeScreen.style.display = 'none';
+                signInScreen.style.display = 'flex';
+                google.accounts.id.initialize({
+                    client_id: "385346786532-aurb1ffoai74n6e6o1b6984sub5e2t2k.apps.googleusercontent.com",
+                    callback: handleSignIn
+                });
+                google.accounts.id.renderButton(
+                    googleSignInButton,
+                    { theme: "filled_blue", size: "large", type: "standard", shape: "pill", text: "signin_with" }
+                );
+            }
+        };
+
+        // EVENT LISTENERS
+        enterBtn.addEventListener('click', () => {
+            welcomeScreen.classList.add('hidden');
+            mainScreen.classList.add('active', 'fade-in');
+            currentState = AppState.IDLE;
+            // ... बाकी का कोड
+        });
+
+        // Logout बटन के लिए Event Listener
+        logoutBtn.addEventListener('click', handleLogout);
+
+        exitYesBtn.addEventListener('click', () => {
+            vibrate();
+            exitDialog.classList.remove('show');
+            handleLogout(); // Yes पर क्लिक करने पर भी लॉगआउट हो जाएगा
+        });
+
+        exitNoBtn.addEventListener('click', () => {
+            vibrate();
+            exitDialog.classList.remove('show');
+        });
+        
+        // ... बाकी का सारा JavaScript कोड पहले जैसा ही रहेगा ...
+        
+        // ===== बाकी के वेरिएबल्स और फंक्शन्स =====
+        let isProcessing = false;
+        let mediaRecorder, audioChunks = [], audioContext, currentAudioSource;
+        const micBtn = document.getElementById('micBtn');
+        const laughingBtn = document.getElementById('laughingBtn');
+        const musicBtn = document.getElementById('musicBtn');
+        const statusText = document.getElementById('statusText');
+        const videos = {
+            standing: document.getElementById('videoStanding'),
+            listening: document.getElementById('videoListening'),
+            talking: document.getElementById('videoTalking'),
+            laughing: document.getElementById('videoLaughing'),
+            music: document.getElementById('videoMusic')
+        };
+        const audios = {
+            laughing: document.getElementById('audioLaughing'),
+            music: document.getElementById('audioMusic')
+        };
+        function switchVideo(targetVideo, enableLoop = false) { Object.values(videos).forEach(v => { v.pause(); v.classList.remove('active'); }); targetVideo.classList.add('active'); targetVideo.currentTime = 0; targetVideo.loop = enableLoop; targetVideo.play().catch(err => console.log('Play error:', err)); }
+        function showStatus(message, duration = 2000) { statusText.textContent = message; statusText.classList.add('show'); setTimeout(() => statusText.classList.remove('show'), duration); }
+        function vibrate(duration = 50) { if ('vibrate' in navigator) navigator.vibrate(duration); }
+        function resetToIdle() { currentState = AppState.IDLE; micBtn.classList.remove('listening', 'speaking'); Object.values(audios).forEach(audio => { audio.onended = null; audio.pause(); audio.currentTime = 0; }); switchVideo(videos.standing, true); showStatus('Ready!', 1500); isProcessing = false; }
+        const handleAudioInteraction = (e, button, state, video, audio, message) => { if (currentState !== AppState.IDLE) return; vibrate(); currentState = state; isProcessing = true; let playCount = 0; switchVideo(video, true); audio.currentTime = 0; audio.play().catch(err => console.log('Audio error:', err)); showStatus(message, 3000); audio.onended = () => { playCount++; if (playCount < 2) { audio.currentTime = 0; audio.play().catch(err => console.log('Audio replay error:', err)); } else { resetToIdle(); } }; };
+        laughingBtn.addEventListener('click', (e) => handleAudioInteraction(e, laughingBtn, AppState.LAUGHING, videos.laughing, audios.laughing, 'Ha ha ha ha!'));
+        musicBtn.addEventListener('click', (e) => handleAudioInteraction(e, musicBtn, AppState.MUSIC, videos.music, audios.music, 'Let\'s dance!'));
+        micBtn.addEventListener('click', async (e) => { vibrate(); if (isProcessing) return showStatus('Please wait...', 1000); if (currentState === AppState.LISTENING) return stopRecording(); if (currentState === AppState.TALKING && currentAudioSource) { currentAudioSource.stop(); resetToIdle(); return; } isProcessing = true; await startRecording(); isProcessing = false; });
+        async function startRecording() { try { audioChunks = []; const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); mediaRecorder = new MediaRecorder(stream); mediaRecorder.ondataavailable = e => e.data.size > 0 && audioChunks.push(e.data); mediaRecorder.onstop = () => { stream.getTracks().forEach(track => track.stop()); processAndPlayAudio(); }; mediaRecorder.start(); currentState = AppState.LISTENING; micBtn.classList.add('listening'); switchVideo(videos.listening, false); showStatus('Listening...', 5000); setTimeout(() => mediaRecorder?.state === 'recording' && stopRecording(), 5000); } catch (error) { showStatus('Mic access denied', 3000); resetToIdle(); } }
+        function stopRecording() { if (mediaRecorder?.state === 'recording') { mediaRecorder.stop(); showStatus('Processing...', 2000); } }
+        async function processAndPlayAudio() { if (audioChunks.length === 0) return resetToIdle(); try { const audioBlob = new Blob(audioChunks, { type: 'audio/webm' }); const arrayBuffer = await audioBlob.arrayBuffer(); audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)(); const audioBuffer = await audioContext.decodeAudioData(arrayBuffer); if (currentAudioSource) currentAudioSource.stop(); const source = audioContext.createBufferSource(); source.buffer = audioBuffer; source.playbackRate.value = 1.5; source.connect(audioContext.destination); currentAudioSource = source; currentState = AppState.TALKING; micBtn.classList.replace('listening', 'speaking'); switchVideo(videos.talking, false); showStatus('Rabbit speaking...', 3000); source.start(0); source.onended = () => { currentAudioSource = null; setTimeout(resetToIdle, 500); }; } catch (error) { showStatus('Processing failed', 2000); resetToIdle(); } }
+        window.addEventListener('popstate', (e) => { e.preventDefault(); if (currentState !== AppState.WELCOME) { exitDialog.classList.add('show'); history.pushState(null, null, window.location.href); } });
+        console.log('🐰 Talking Rabbit App Ready');
+        Object.values(videos).forEach(video => { video.load(); });
+        history.pushState(null, null, window.location.href);
+    </script>
+</body>
+</html>
         #welcomeScreen.hidden {
             display: none;
         }
