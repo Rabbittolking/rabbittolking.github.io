@@ -1,1 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dhurandhar Game App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Capacitor Community AdMob Plugin -->
+    <script src="https://unpkg.com/@capacitor-community/admob"></script>
+
+    <style>
+        :root {
+            --primary-blue: #1a237e;
+            --secondary-yellow: #ffca28;
+            --accent-pink: #e91e63;
+            --bg-body: #000000;
+            --bg-app: #121212;
+            --card-bg: #222222;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --separator: #333333;
+        }
+
+        /* Dark Mode Theme Setup */
+        body.light-mode {
+            --bg-body: #e0e0e0;
+            --bg-app: #f4f4f4;
+            --card-bg: #ffffff;
+            --text-main: #000000;
+            --text-muted: #555555;
+            --separator: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            display: flex;
+            justify-content: center; /* Center the app on desktop */
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile App Container container */
+        .app-container {
+            width: 100%;
+            max-width: 420px; /* Mobile screen width */
+            height: 100vh;
+            max-height: 900px;
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        /* Header Gradient */
+        .header {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-yellow), var(--accent-pink));
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-left i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .app-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 2px solid white;
+        }
+
+        .app-name {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .header-right i {
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        /* Main Content Scroll Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 15px;
+            padding-bottom: 20px;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 25px;
+            padding: 5px 15px;
+            align-items: center;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--separator);
+        }
+
+        .search-box i {
+            color: var(--secondary-yellow);
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 16px;
+            outline: none;
+            padding: 10px 0;
+        }
+
+        .search-box button {
+            background-color: var(--secondary-yellow);
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Game List */
+        .game-list-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 1px solid var(--separator);
+            overflow: hidden;
+        }
+
+        .game-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--separator);
+        }
+        .game-item:last-child {
+            border-bottom: none;
+        }
+
+        .game-item img {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .game-info {
+            flex: 1;
+        }
+
+        .game-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .game-online {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .play-btn {
+            background-color: var(--accent-pink);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(233, 30, 99, 0.4);
+            transition: transform 0.1s;
+        }
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Profile Page */
+        .profile-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--separator);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+
+        .profile-card h2 {
+            margin-top: 0;
+            color: var(--secondary-yellow);
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-pink);
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .input-group input[type="text"], .input-group input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--separator);
+            background-color: var(--bg-app);
+            color: var(--text-main);
+        }
+
+        .save-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--secondary-yellow), #ff9800);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .dark-mode-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--separator);
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-pink); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Footer Navigation */
+        .footer {
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-yellow), var(--accent-pink));
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+        .nav-item.active {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-left">
+                <i class="fas fa-bars"></i>
+                <img src="https://i.ibb.co/0yrVKNQY/20260417-153442.png" alt="Icon" class="app-icon">
+                <span class="app-name">Dhurandhar</span>
+            </div>
+            <div class="header-right">
+                <i class="fas fa-user-circle" onclick="switchTab('profile')"></i>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="content" id="main-content">
+
+            <!-- ====== HOME PAGE ====== -->
+            <div id="home-page">
+
+                <!-- Search -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search Game..." onkeyup="searchGames()">
+                    <button onclick="searchGames()">Search</button>
+                </div>
+
+                <!-- Game List Wrapper -->
+                <div class="game-list-container" id="game-list">
+                    <!-- Games load dynamically here via JS -->
+                    <p style="text-align: center; padding: 20px; color: var(--text-muted);">Loading Games...</p>
+                </div>
+            </div>
+
+            <!-- ====== PROFILE PAGE ====== -->
+            <div id="profile-page" class="hidden">
+                <div class="profile-card">
+                    <h2>User Profile</h2>
+                    <img id="profilePreview" src="https://via.placeholder.com/150" class="profile-img">
+
+                    <div class="input-group">
+                        <label>Your Name</label>
+                        <input type="text" id="profileName" placeholder="Enter full name">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Profile Picture</label>
+                        <input type="file" id="profileImage" accept="image/*">
+                    </div>
+
+                    <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+
+                    <div class="dark-mode-row">
+                        <span style="font-weight: bold; color: var(--text-main);">Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER NAVIGATION -->
+        <div class="footer">
+            <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT LOGIC ===== -->
+    <script>
+        // 1. Firebase Configuration (Connect your Database)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAn0dI8lFbIxkwNdCfxw0yxxU0NrFN8AQE",
+            authDomain: "dhurandhar-ec0a0.firebaseapp.com",
+            databaseURL: "https://dhurandhar-ec0a0-default-rtdb.firebaseio.com",
+            projectId: "dhurandhar-ec0a0",
+            storageBucket: "dhurandhar-ec0a0.firebasestorage.app",
+            messagingSenderId: "675272696469",
+            appId: "1:675272696469:web:30146c4982546224c0b19c"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Unique user ID for profile data
+        let currentUserId = null;
+
+        // Get a unique ID for the current user (e.g., based on device or login)
+        // For this example, we'll simulate a unique ID. In a real app, you'd use Firebase Authentication.
+        function getUniqueUserId() {
+            let uid = localStorage.getItem('uniqueUserId');
+            if (!uid) {
+                uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('uniqueUserId', uid);
+            }
+            return uid;
+        }
+        currentUserId = getUniqueUserId();
+
+        // Backup static games in case Firebase is empty
+        const defaultGames = [
+            { id: "g1", name: "Ludo Master", onlineCount: 18, iconUrl: "https://i.ibb.co/L5tNn9G/ludo.png", gameUrl: "https://poki.com/en/ludo" },
+            { id: "g2", name: "Space Shooter", onlineCount: 12, iconUrl: "https://i.ibb.co/zH7b9Wz/space-shooter-icon.png", gameUrl: "#" },
+            { id: "g3", name: "Candy Match", onlineCount: 8, iconUrl: "https://i.ibb.co/K2fBxtB/candy-match-icon.png", gameUrl: "#" }
+        ];
+
+        let allGamesData = [];
+
+        // 2. Fetch Games From Firebase
+        function loadGamesFromDB() {
+            db.ref('games').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    allGamesData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                } else {
+                    allGamesData = defaultGames; // Use default if DB is empty
+                }
+                renderGames(allGamesData);
+            }, (error) => {
+                console.log("Firebase error, using default data.", error);
+                allGamesData = defaultGames;
+                renderGames(allGamesData);
+            });
+        }
+
+        // 3. Render Games to HTML
+        function renderGames(gamesArray) {
+            const listDiv = document.getElementById('game-list');
+            listDiv.innerHTML = '';
+
+            if(gamesArray.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">No Game Found!</p>';
+                return;
+            }
+
+            gamesArray.forEach(game => {
+                const img = game.iconUrl || 'https://via.placeholder.com/60';
+                const online = game.onlineCount || 0;
+
+                listDiv.innerHTML += `
+                    <div class="game-item">
+                        <img src="${img}" alt="${game.name}">
+                        <div class="game-info">
+                            <div class="game-title">${game.name}</div>
+                            <div class="game-online">Online: ${online}</div>
+                        </div>
+                        <button class="play-btn" onclick="playGame('${game.gameUrl}', '${game.name}')">PLAY</button>
+                    </div>
+                `;
+            });
+        }
+
+        // 4. Search Filter
+        function searchGames() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = allGamesData.filter(g => g.name.toLowerCase().includes(query));
+            renderGames(filtered);
+        }
+
+        // 5. Play Button Action
+        function playGame(url, name) {
+            if(url && url !== "#") {
+                window.open(url, '_blank');
+            } else {
+                alert(`Opening ${name}...`);
+            }
+        }
+
+        // 6. Navigation Tabs logic
+        function switchTab(tab) {
+            const home = document.getElementById('home-page');
+            const profile = document.getElementById('profile-page');
+            const navHome = document.getElementById('nav-home');
+            const navProfile = document.getElementById('nav-profile');
+
+            // Hide all tabs
+            home.classList.add('hidden');
+            profile.classList.add('hidden');
+
+            // Remove active class from all nav items
+            navHome.classList.remove('active');
+            navProfile.classList.remove('active');
+
+            // Show the selected tab and set active class
+            if(tab === 'home') {
+                home.classList.remove('hidden');
+                navHome.classList.add('active');
+            } else if (tab === 'profile') {
+                profile.classList.remove('hidden');
+                navProfile.classList.add('active');
+            }
+        }
+
+        // 7. Profile Logic (Load, Preview Image, Save)
+        function loadProfile() {
+            if (!currentUserId) return;
+            db.ref('profiles/' + currentUserId).on('value', (snap) => {
+                const data = snap.val();
+                if(data) {
+                    document.getElementById('profileName').value = data.name || '';
+                    if(data.imageUrl) {
+                        document.getElementById('profilePreview').src = data.imageUrl;
+                    } else {
+                        // Default image if no URL is found
+                        document.getElementById('profilePreview').src = 'https://via.placeholder.com/150';
+                    }
+                } else {
+                    // Clear fields if no profile data for this user
+                    document.getElementById('profileName').value = '';
+                    document.getElementById('profilePreview').src = 'https://via.placeholder.com/150';
+                }
+            });
+        }
+
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('profilePreview').src = evt.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function saveProfile() {
+            const name = document.getElementById('profileName').value.trim();
+            const imageUrl = document.getElementById('profilePreview').src;
+
+            if (!currentUserId) {
+                alert("Could not get a unique user ID. Profile not saved.");
+                return;
+            }
+
+            db.ref('profiles/' + currentUserId).set({
+                name: name,
+                imageUrl: imageUrl
+            }).then(() => {
+                alert("Profile Saved!");
+                // Optional: Show interstitial ad after saving profile
+                showInterstitialAd();
+            }).catch(error => {
+                console.error("Error saving profile: ", error);
+                alert("Failed to save profile. Please try again.");
+            });
+        }
+
+        // 8. Dark Mode / Light Mode Logic
+        function toggleTheme() {
+            const isDark = document.getElementById('themeToggle').checked;
+            if(isDark) {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            let savedTheme = localStorage.getItem('theme');
+            // Default to dark mode if no saved theme or if savedTheme is 'dark'
+            if(savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggle').checked = false;
+            } else {
+                document.body.classList.remove('light-mode');
+                document.getElementById('themeToggle').checked = true;
+            }
+        }
+
+        // AdMob Functions
+        const ADMOB_APP_OPEN_AD_ID = 'ca-app-pub-3113275088766608/5298176282';
+        const ADMOB_BANNER_AD_ID = 'ca-app-pub-3113275088766608/8812801925';
+        const ADMOB_INTERSTITIAL_AD_ID = 'ca-app-pub-3113275088766608/2247393575';
+        const ADMOB_REWARDED_INTERSTITIAL_AD_ID = 'ca-app-pub-3113275088766608/7308148564'; // Rewarded Interstitial
+
+        async function setupAds() {
+            try {
+                // 1. AdMob ko shuru karein
+                await capacitorCommunityAdmob.AdMob.initialize({
+                    // testingDevices: ['YOUR_TEST_DEVICE_HASH'], // Uncomment and add your test device hash if needed
+                    // initializeForConfiguration: true, // Consider setting this to true for more advanced configurations
+                });
+                console.log('AdMob initialized');
+
+                // 2. App Open Ad (Optional: if you want to show an ad immediately on app launch)
+                // await capacitorCommunityAdmob.AdMob.showAd({
+                //     adId: ADMOB_APP_OPEN_AD_ID,
+                //     adUnit: 'app_open',
+                //     isTesting: false,
+                //     // You might need to configure the 'app_open' ad type in your AdMob settings
+                //     // For app open ads, often they are loaded and displayed automatically by the system
+                // });
+
+                // 3. Banner Ad dikhayein
+                await capacitorCommunityAdmob.AdMob.showBanner({
+                    adId: ADMOB_BANNER_AD_ID, // Aapki Banner ID
+                    position: 'BOTTOM_CENTER', // Ad niche dikhega
+                    margin: 0,
+                    isTesting: false // Live ads ke liye false rakhein
+                });
+                console.log('Banner ad shown');
+
+                // 4. Interstitial Ad (Full Screen) Load karein
+                await capacitorCommunityAdmob.AdMob.prepareInterstitial({
+                    adId: ADMOB_INTERSTITIAL_AD_ID, // Aapki Interstitial ID
+                    isTesting: false
+                });
+                console.log('Interstitial ad prepared');
+
+                // 5. Rewarded Interstitial Ad Load karein (if you plan to use it)
+                await capacitorCommunityAdmob.AdMob.prepareRewardInterstitial({
+                    adId: ADMOB_REWARDED_INTERSTITIAL_AD_ID,
+                    isTesting: false
+                });
+                console.log('Rewarded interstitial ad prepared');
+
+            } catch (error) {
+                console.error('Error setting up AdMob:', error);
+            }
+        }
+
+        // Function to show Interstitial Ad
+        async function showInterstitialAd() {
+            try {
+                const result = await capacitorCommunityAdmob.AdMob.showInterstitial();
+                console.log('Interstitial ad shown:', result);
+            } catch (error) {
+                console.error('Error showing interstitial ad:', error);
+            }
+        }
+
+        // Function to show Rewarded Interstitial Ad
+        async function showRewardedInterstitialAd() {
+            try {
+                const result = await capacitorCommunityAdmob.AdMob.showRewardInterstitial();
+                console.log('Rewarded interstitial ad shown:', result);
+                // Handle ad completion and reward logic here
+                if (result && result.adResult === 'COMPLETED') {
+                    alert('You earned a reward!');
+                    // Grant reward to the user
+                }
+            } catch (error) {
+                console.error('Error showing rewarded interstitial ad:', error);
+            }
+        }
+
+        // To play a game, you might want to show an interstitial ad first
+        function playGameWithAd(url, name) {
+            // Show interstitial ad before opening the game
+            showInterstitialAd().then(() => {
+                // Once the ad is closed (or if it failed to show), play the game
+                if(url && url !== "#") {
+                    window.open(url, '_blank');
+                } else {
+                    alert(`Opening ${name}...`);
+                }
+            });
+        }
+
+
+        // Init App On Load
+        window.onload = () => {
+            initTheme();
+            loadGamesFromDB();
+            loadProfile(); // Load profile for the current user
+            // Ensure we have a user ID before setting up ads
+            if (currentUserId) {
+                setupAds(); // Setup ads only when deviceready has fired or locally available
+            }
+        };
+
+        // Use deviceready event for Capacitor apps to ensure plugins are ready
+        document.addEventListener('deviceready', () => {
+            console.log('Device is ready.');
+            // Ensure currentUserId is set before calling setupAds
+            currentUserId = getUniqueUserId();
+            setupAds();
+        });
+
+        // Initial call to switch to home tab
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('home');
+        });
+
+    </script>
+</body>
+</html>
 
