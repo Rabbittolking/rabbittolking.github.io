@@ -2,911 +2,165 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MINI GAME</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <!-- Capacitor Community AdMob Plugin -->
-    <script src="https://unpkg.com/@capacitor-community/admob"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download MINI GAME</title>
     <style>
-        /* --- Custom Color Variables --- */
-        :root {
-            --primary-purple: #1a0b2a;        /* Dark background for app container */
-            --secondary-purple-dark: #2a1a3c; /* Slightly lighter purple for cards */
-            --secondary-purple-light: #4a3a5c; /* Even lighter for subtle backgrounds */
-            --accent-pink: #e91e63;          /* Vibrant pink for main accents */
-            --accent-purple: #9c27b0;        /* Rich purple for gradients */
-            --accent-yellow: #ffc107;        /* Warm yellow/orange for highlights */
-            --text-main: #ffffff;
-            --text-muted: #b39ddb;           /* Lighter purple for muted text */
-            --separator: #3a2a4a;            /* Darker separator for cards */
-
-            /* Advanced Gradients for Header/Footer */
-            --gradient-header-start: #e91e63;   /* Pink */
-            --gradient-header-middle: #9c27b0;  /* Purple */
-            --gradient-header-end: #ffc107;    /* Yellow */
-
-            --gradient-footer-start: #ffc107;   /* Yellow */
-            --gradient-footer-middle: #e91e63;  /* Pink */
-            --gradient-footer-end: #673ab7;     /* Deeper Purple */
-        }
-
-        /* Light Mode */
-        body.light-mode {
-            --primary-purple: #f3e5f5;
-            --secondary-purple-dark: #ffffff;
-            --secondary-purple-light: #e1bee7;
-            --accent-pink: #f48fb1;
-            --accent-purple: #ba68c8;
-            --accent-yellow: #ffee58;
-            --text-main: #000000;
-            --text-muted: #757575;
-            --separator: #e0e0e0;
-            --gradient-header-start: #f48fb1;
-            --gradient-header-middle: #e1bee7;
-            --gradient-header-end: #ffee58;
-            --gradient-footer-start: #ffee58;
-            --gradient-footer-middle: #f48fb1;
-            --gradient-footer-end: #9575cd;
-        }
-
-        /* --- Global Styles --- */
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--primary-purple); /* Primary dark background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--text-main);
-            overflow: hidden; /* Prevent scrollbars on the entire body */
-        }
-
-        /* Mobile App Container */
-        .app-container {
-            width: 100%;
-            max-width: 420px;
-            height: 100vh;
-            max-height: 900px;
-            background-color: var(--primary-purple); /* Use the darker primary purple */
+            background: linear-gradient(135deg, #1e1e2f, #111119);
+            color: #ffffff;
             display: flex;
             flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            overflow: hidden;
-            border-radius: 10px; /* Optional: slight rounding */
-        }
-
-        /* HEADER: Advanced and Animated Gradient */
-        .header {
-            /* Animated Gradient */
-            background: linear-gradient(120deg, var(--gradient-header-start), var(--gradient-header-middle), var(--gradient-header-end), var(--gradient-header-middle));
-            background-size: 400% 400%; /* Make the gradient much larger than the element */
-            animation: gradientAnimation 15s ease infinite; /* Animation: name, duration, timing, iteration */
-
-            padding: 15px 20px;
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            color: white;
-            z-index: 10;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.6); /* Deeper shadow */
-            border-bottom: 1px solid var(--accent-purple); /* Subtle separator */
-            position: relative; /* For pseudo-elements if needed later */
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px 15px;
         }
 
-        /* Animation for gradient */
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .container {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-left i {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-main);
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Slight glow */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
         }
 
         .app-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: 2px solid white;
-            box-shadow: 0 0 8px rgba(0,0,0,0.4); /* Shadow for icon */
+            width: 110px;
+            height: 110px;
+            border-radius: 24px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
         .app-name {
-            font-size: 22px;
-            font-weight: 900; /* Bolder */
-            letter-spacing: 0.8px;
-            text-shadow: 0 0 10px rgba(255, 193, 7, 0.6), /* Yellow glow */
-                         0 0 5px rgba(233, 30, 99, 0.5); /* Pink glow */
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .header-right i {
-            font-size: 26px;
-            cursor: pointer;
-            color: var(--text-main);
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Slight glow */
+        .app-subtitle {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 25px;
         }
 
-        /* Main Content Scroll Area */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 15px;
-            padding-bottom: 80px; /* Space for footer */
-            position: relative; /* For positioning ad banner */
-            background-color: var(--primary-purple); /* Ensure content area background is consistent */
-        }
-
-        /* Search Box */
-        .search-box {
-            display: flex;
-            background-color: var(--secondary-purple-dark); /* Darker purple card */
-            border-radius: 30px; /* More rounded */
-            padding: 10px 20px; /* More padding */
+        .download-btn {
+            display: inline-flex;
             align-items: center;
-            margin: 20px 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4); /* Deeper shadow */
-            border: 1px solid var(--accent-purple); /* Purple border */
-        }
-
-        .search-box i {
-            color: var(--accent-yellow);
-            font-size: 22px; /* Slightly larger */
-            margin-right: 12px;
-            text-shadow: 0 0 8px var(--accent-yellow); /* Yellow glow */
-        }
-
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 17px; /* Larger font */
-            outline: none;
-            padding: 8px 0;
-        }
-
-        .search-box input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .search-box button {
-            background: linear-gradient(135deg, var(--accent-yellow), #ff9800); /* Yellow to orange gradient */
-            color: #000;
-            border: none;
-            padding: 12px 25px; /* Larger padding */
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 15px; /* Larger font */
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.5);
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .search-box button:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
-        }
-
-        /* Game List Container */
-        .game-list-container {
-            background-color: var(--secondary-purple-dark);
-            border-radius: 15px; /* More rounded */
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            border: 1px solid var(--accent-purple);
-            overflow: hidden;
-        }
-
-        .game-item {
-            display: flex;
-            align-items: center;
-            padding: 18px; /* More padding */
-            border-bottom: 1px solid var(--separator);
-            transition: background-color 0.2s ease, transform 0.1s ease;
-        }
-        .game-item:last-child {
-            border-bottom: none;
-        }
-        .game-item:hover {
-            background-color: rgba(255, 255, 255, 0.08); /* More noticeable hover */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Enhanced shadow on hover */
-        }
-
-        .game-item img {
-            width: 60px; /* Slightly larger */
-            height: 60px;
-            border-radius: 12px; /* More rounded */
-            object-fit: cover;
-            margin-right: 18px; /* More margin */
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        .game-info {
-            flex: 1;
-        }
-
-        .game-title {
-            font-size: 18px; /* Larger */
-            font-weight: bold;
-            margin-bottom: 6px; /* More margin */
-            color: var(--text-main);
-        }
-
-        .game-online {
-            font-size: 14px; /* Larger */
-            color: var(--text-muted);
-        }
-
-        .play-btn {
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); /* Pink to purple gradient */
+            justify-content: center;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
             color: white;
-            border: none;
-            padding: 12px 25px; /* Larger padding */
-            border-radius: 30px; /* More rounded */
-            font-weight: bold;
-            font-size: 15px; /* Larger font */
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.5); /* Shadow matching gradient */
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .play-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 3px 10px rgba(156, 39, 176, 0.4);
-        }
-
-        /* --- Profile Page Styles --- */
-        .profile-card {
-            background-color: var(--secondary-purple-dark);
-            padding: 30px; /* More padding */
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid var(--accent-purple);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            text-decoration: none;
+            padding: 14px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+            width: 100%;
             margin-bottom: 20px;
         }
 
-        .profile-card h2 {
-            margin-top: 0;
-            color: var(--accent-yellow);
-            font-size: 28px; /* Larger */
-            margin-bottom: 25px; /* More margin */
-            text-shadow: 0 0 10px var(--accent-yellow); /* Yellow glow */
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 114, 255, 0.6);
         }
 
-        .profile-img {
-            width: 130px; /* Larger */
-            height: 130px;
-            border-radius: 50%;
-            border: 5px solid var(--accent-pink);
-            object-fit: cover;
-            margin-bottom: 25px; /* More margin */
-            box-shadow: 0 8px 18px rgba(233, 30, 99, 0.6);
+        .google-play-badge {
+            width: 135px;
+            opacity: 0.8;
         }
 
-        .input-group {
-            text-align: left;
-            margin-bottom: 20px; /* More margin */
+        /* Screenshot Section */
+        .screenshot-section {
+            width: 100%;
         }
-        .input-group label {
-            display: block;
-            margin-bottom: 10px; /* More margin */
-            font-size: 15px; /* Larger */
-            color: var(--text-muted);
+
+        .section-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 15px;
             font-weight: 600;
         }
-        .input-group input[type="text"],
-        .input-group input[type="file"] {
-            width: 100%;
-            padding: 15px 18px; /* More padding */
-            border-radius: 10px; /* More rounded */
-            border: 1px solid var(--separator);
-            background-color: var(--primary-purple); /* App background */
-            color: var(--text-main);
-            font-size: 17px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .input-group input[type="text"]:focus,
-        .input-group input[type="file"]:focus {
-            outline: none;
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 15px rgba(233, 30, 99, 0.4); /* Pink glow */
-        }
 
-        /* File input styling for 'Choose File' button */
-        .file-input-wrapper {
-            position: relative;
-            width: 100%;
-            height: 50px; /* Match height of text input */
+        .screenshot-container {
             display: flex;
-            align-items: center;
-            border-radius: 10px;
-            border: 1px solid var(--separator);
-            background-color: var(--primary-purple);
-            color: var(--text-main);
-            padding: 0 18px;
-            font-size: 17px;
-            cursor: pointer;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .file-input-wrapper:focus-within { /* Apply focus to the wrapper */
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
-        }
-        .file-input-wrapper span {
-            margin-right: 12px;
-            color: var(--text-muted);
-        }
-        .file-input-wrapper .choose-file-btn {
-            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
-            color: #000;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            margin-left: auto;
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .file-input-wrapper .choose-file-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+            gap: 15px;
+            justify-content: center;
+            overflow-x: auto;
+            padding-bottom: 10px;
         }
 
-        .save-btn {
+        .screenshot-frame {
+            background: #000;
+            border: 4px solid #333;
+            border-radius: 18px;
+            width: 47%; /* Side by side fit */
+            aspect-ratio: 9 / 16;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .screenshot-frame img {
             width: 100%;
-            background: linear-gradient(135deg, var(--accent-yellow), #ff9800);
-            color: #000;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 17px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            height: 100%;
+            object-fit: cover;
         }
-        .save-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.4);
-        }
-
-        .dark-mode-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--separator);
-        }
-        .dark-mode-row span {
-            font-weight: bold;
-            color: var(--text-main);
-            font-size: 17px;
-        }
-
-        /* Switch Toggle */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 56px; /* Slightly larger */
-            height: 30px;
-        }
-        .switch input { display: none; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--text-muted);
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px; width: 22px;
-            left: 4px; bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--accent-pink); }
-        input:checked + .slider:before { transform: translateX(26px); }
-
-        /* FOOTER NAVIGATION: Advanced and Animated Gradient */
-        .footer {
-            background: linear-gradient(120deg, var(--gradient-footer-start), var(--gradient-footer-middle), var(--gradient-footer-end), var(--gradient-footer-middle));
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite; /* Same animation as header for consistency */
-
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0; /* More padding */
-            z-index: 10;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.6); /* Deeper shadow */
-            border-top: 1px solid var(--accent-purple); /* Subtle separator */
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            font-size: 13px; /* Slightly larger text */
-            transition: color 0.3s ease, transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            padding: 8px 12px;
-        }
-        .nav-item.active {
-            color: #ffffff;
-            font-weight: bold;
-            transform: translateY(-3px); /* Slight lift effect when active */
-        }
-        .nav-item i {
-            font-size: 24px; /* Larger icon */
-            margin-bottom: 6px;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4); /* Subtle glow */
-        }
-        .nav-item:active {
-             transform: translateY(0px); /* Reset on tap */
-        }
-        .nav-item.active i {
-            text-shadow: 0 0 15px rgba(255, 193, 7, 0.7), /* Yellow glow */
-                         0 0 8px rgba(233, 30, 99, 0.6); /* Pink glow */
-        }
-
-
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- HEADER -->
-        <div class="header">
-            <div class="header-left">
-                <i class="fas fa-bars"></i>
-                <img src="https://i.ibb.co/Y4j1vBLw/1000049146-removebg-preview.png" alt="Icon" class="app-icon">
-                <span class="app-name">MINI GAME</span>
-            </div>
-            <div class="header-right">
-                <i class="fas fa-user-circle" onclick="switchTab('profile')"></i>
-            </div>
+    <div class="container">
+        <!-- Main Download Card -->
+        <div class="card">
+            <img class="app-icon" src="https://i.ibb.co/Y4j1vBLw/1000049146-removebg-preview.png" alt="MINI GAME Icon">
+            <h1 class="app-name">MINI GAME</h1>
+            <p class="app-subtitle">Play exciting games inside one app!</p>
+            
+            <a href="https://play.google.com/store/apps/details?id=com.dhurandhar.game" class="download-btn">
+                Download Now
+            </a>
+
+            <img class="google-play-badge" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
         </div>
 
-        <!-- MAIN CONTENT AREA -->
-        <div class="content" id="main-content">
-
-            <!-- ====== HOME PAGE ====== -->
-            <div id="home-page">
-
-                <!-- Search -->
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search Game..." onkeyup="searchGames()">
-                    <button onclick="searchGames()">Search</button>
+        <!-- Screenshots Section -->
+        <div class="screenshot-section">
+            <h2 class="section-title">App Screenshots</h2>
+            <div class="screenshot-container">
+                <!-- Screenshot 1 -->
+                <div class="screenshot-frame">
+                    <img src="https://i.ibb.co/kvjv9rx/Screenshot-2026-05-18-08-36-48-88-a1838d6df6a3f2a3460b5a9d4144fc68.jpg" alt="MINI GAME Screen 1">
                 </div>
-
-                <!-- Game List Wrapper -->
-                <div class="game-list-container" id="game-list">
-                    <!-- Games load dynamically here via JS -->
-                    <p style="text-align: center; padding: 20px; color: var(--text-muted);">Loading Games...</p>
+                <!-- Screenshot 2 -->
+                <div class="screenshot-frame">
+                    <img src="https://i.ibb.co/DPdkxY0X/Screenshot-2026-05-18-08-36-53-47-a1838d6df6a3f2a3460b5a9d4144fc68.jpg" alt="MINI GAME Screen 2">
                 </div>
-            </div>
-
-            <!-- ====== PROFILE PAGE ====== -->
-            <div id="profile-page" class="hidden">
-                <div class="profile-card">
-                    <h2>User Profile</h2>
-                    <img id="profilePreview" src="https://via.placeholder.com/150" class="profile-img">
-
-                    <div class="input-group">
-                        <label>Your Name</label>
-                        <input type="text" id="profileName" placeholder="Enter full name">
-                    </div>
-
-                    <div class="input-group">
-                        <label>Profile Picture</label>
-                        <!-- The actual file input is hidden and controlled by the file-input-wrapper -->
-                        <input type="file" id="profileImage" accept="image/*">
-                        <div class="file-input-wrapper">
-                            <span id="fileNameDisplay">No file chosen</span>
-                            <label for="profileImage" class="choose-file-btn">Choose File</label>
-                        </div>
-                    </div>
-
-                    <button class="save-btn" onclick="saveProfile()">Save Profile</button>
-
-                    <div class="dark-mode-row">
-                        <span>Dark Mode</span>
-                        <label class="switch">
-                            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- FOOTER NAVIGATION -->
-        <div class="footer">
-            <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </div>
-            <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
             </div>
         </div>
     </div>
 
-    <!-- ===== JAVASCRIPT LOGIC ===== -->
-    <script>
-        // 1. Firebase Configuration (Connect your Database)
-        const firebaseConfig = {
-            apiKey: "AIzaSyAn0dI8lFbIxkwNdCfxw0yxxU0NrFN8AQE",
-            authDomain: "dhurandhar-ec0a0.firebaseapp.com",
-            databaseURL: "https://dhurandhar-ec0a0-default-rtdb.firebaseio.com",
-            projectId: "dhurandhar-ec0a0",
-            storageBucket: "dhurandhar-ec0a0.firebasestorage.app",
-            messagingSenderId: "675272696469",
-            appId: "1:675272696469:web:30146c4982546224c0b19c"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // Unique user ID for profile data
-        let currentUserId = null;
-
-        // Get a unique ID for the current user (e.g., based on device or login)
-        // For this example, we'll simulate a unique ID. In a real app, you'd use Firebase Authentication.
-        function getUniqueUserId() {
-            let uid = localStorage.getItem('uniqueUserId');
-            if (!uid) {
-                uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('uniqueUserId', uid);
-            }
-            return uid;
-        }
-        currentUserId = getUniqueUserId();
-
-        // Backup static games in case Firebase is empty
-        const defaultGames = [
-            { id: "g1", name: "Ludo Master", onlineCount: 18, iconUrl: "https://i.ibb.co/L5tNn9G/ludo.png", gameUrl: "https://poki.com/en/ludo" },
-            { id: "g2", name: "Space Shooter", onlineCount: 12, iconUrl: "https://i.ibb.co/zH7b9Wz/space-shooter-icon.png", gameUrl: "#" },
-            { id: "g3", name: "Candy Match", onlineCount: 8, iconUrl: "https://i.ibb.co/K2fBxtB/candy-match-icon.png", gameUrl: "#" }
-        ];
-
-        let allGamesData = [];
-
-        // 2. Fetch Games From Firebase
-        function loadGamesFromDB() {
-            db.ref('games').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    allGamesData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-                } else {
-                    allGamesData = defaultGames; // Use default if DB is empty
-                }
-                renderGames(allGamesData);
-            }, (error) => {
-                console.log("Firebase error, using default data.", error);
-                allGamesData = defaultGames;
-                renderGames(allGamesData);
-            });
-        }
-
-        // 3. Render Games to HTML
-        function renderGames(gamesArray) {
-            const listDiv = document.getElementById('game-list');
-            listDiv.innerHTML = '';
-
-            if(gamesArray.length === 0) {
-                listDiv.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">No Game Found!</p>';
-                return;
-            }
-
-            gamesArray.forEach(game => {
-                const img = game.iconUrl || 'https://via.placeholder.com/60';
-                const online = game.onlineCount || 0;
-
-                listDiv.innerHTML += `
-                    <div class="game-item">
-                        <img src="${img}" alt="${game.name}">
-                        <div class="game-info">
-                            <div class="game-title">${game.name}</div>
-                            <div class="game-online">Online: ${online}</div>
-                        </div>
-                        <button class="play-btn" onclick="playGameWithAd('${game.gameUrl}', '${game.name}')">PLAY</button>
-                    </div>
-                `;
-            });
-        }
-
-        // 4. Search Filter
-        function searchGames() {
-            let query = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = allGamesData.filter(g => g.name.toLowerCase().includes(query));
-            renderGames(filtered);
-        }
-
-        // 5. Play Button Action (now includes ad logic)
-        function playGameWithAd(url, name) {
-            // Show interstitial ad before opening the game
-            // Ensure ads are ready before calling this
-            if (capacitorCommunityAdmob && capacitorCommunityAdmob.AdMob) {
-                showInterstitialAd().then(() => {
-                    // Once the ad is closed (or if it failed to show), play the game
-                    openGame(url, name);
-                }).catch(error => {
-                    console.error("Error showing interstitial ad before game:", error);
-                    openGame(url, name); // Still try to open game if ad fails
-                });
-            } else {
-                openGame(url, name); // Open game if AdMob is not initialized
-            }
-        }
-
-        function openGame(url, name) {
-            if(url && url !== "#") {
-                window.open(url, '_blank');
-            } else {
-                alert(`Opening ${name}... (Link not provided)`);
-            }
-        }
-
-
-        // 6. Navigation Tabs logic
-        function switchTab(tab) {
-            const home = document.getElementById('home-page');
-            const profile = document.getElementById('profile-page');
-            const navHome = document.getElementById('nav-home');
-            const navProfile = document.getElementById('nav-profile');
-
-            // Hide all tabs
-            home.classList.add('hidden');
-            profile.classList.add('hidden');
-
-            // Remove active class from all nav items
-            navHome.classList.remove('active');
-            navProfile.classList.remove('active');
-
-            // Show the selected tab and set active class
-            if(tab === 'home') {
-                home.classList.remove('hidden');
-                navHome.classList.add('active');
-            } else if (tab === 'profile') {
-                profile.classList.remove('hidden');
-                navProfile.classList.add('active');
-            }
-        }
-
-        // 7. Profile Logic (Load, Preview Image, Save)
-        function loadProfile() {
-            if (!currentUserId) return;
-            db.ref('profiles/' + currentUserId).on('value', (snap) => {
-                const data = snap.val();
-                if(data) {
-                    document.getElementById('profileName').value = data.name || '';
-                    if(data.imageUrl) {
-                        document.getElementById('profilePreview').src = data.imageUrl;
-                    } else {
-                        // Default image if no URL is found
-                        document.getElementById('profilePreview').src = 'https://via.placeholder.com/150';
-                    }
-                } else {
-                    // Clear fields if no profile data for this user
-                    document.getElementById('profileName').value = '';
-                    document.getElementById('profilePreview').src = 'https://via.placeholder.com/150';
-                }
-            });
-        }
-
-        const profileImageInput = document.getElementById('profileImage');
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-
-        profileImageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if(file) {
-                fileNameDisplay.textContent = file.name; // Display selected file name
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('profilePreview').src = evt.target.result;
-                }
-                reader.readAsDataURL(file);
-            } else {
-                fileNameDisplay.textContent = 'No file chosen'; // Reset if no file selected
-            }
-        });
-
-        function saveProfile() {
-            const name = document.getElementById('profileName').value.trim();
-            const imageUrl = document.getElementById('profilePreview').src;
-
-            if (!currentUserId) {
-                alert("Could not get a unique user ID. Profile not saved.");
-                return;
-            }
-
-            db.ref('profiles/' + currentUserId).set({
-                name: name,
-                imageUrl: imageUrl
-            }).then(() => {
-                alert("Profile Saved!");
-                // Optional: Show interstitial ad after saving profile
-                if (capacitorCommunityAdmob && capacitorCommunityAdmob.AdMob) {
-                    showInterstitialAd();
-                }
-            }).catch(error => {
-                console.error("Error saving profile: ", error);
-                alert("Failed to save profile. Please try again.");
-            });
-        }
-
-        // 8. Dark Mode / Light Mode Logic
-        function toggleTheme() {
-            const isDark = document.getElementById('themeToggle').checked;
-            if(isDark) {
-                document.body.classList.remove('light-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.add('light-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        }
-
-        function initTheme() {
-            let savedTheme = localStorage.getItem('theme');
-            // Default to dark mode if no saved theme or if savedTheme is 'dark'
-            if(savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                document.getElementById('themeToggle').checked = false;
-            } else {
-                document.body.classList.remove('light-mode'); // Ensure dark mode is applied by default
-                document.getElementById('themeToggle').checked = true;
-            }
-        }
-
-        // --- AdMob Functions ---
-        // IMPORTANT: Replace these with your actual AdMob ad unit IDs.
-        // Use test IDs if you are still developing to avoid policy violations.
-        // For testing, use the sample IDs provided by Google:
-        // https://developers.google.com/admob/android/test-ads
-        // Test Interstitial ID for Android: ca-app-pub-3940256099942544/1030915120
-        // Test Interstitial ID for iOS: ca-app-pub-3940256099942544/4414146040
-        const ADMOB_INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/1030915120'; // <<< REPLACE OR USE TEST ID
-        const ADMOB_BANNER_AD_ID = 'ca-app-pub-3940256099942544/6300978111'; // <<< REPLACE OR USE TEST ID (or remove if not using banner)
-        // Add other ad IDs if needed (e.g., rewarded ads)
-
-        async function setupAds() {
-            if (!capacitorCommunityAdmob || !capacitorCommunityAdmob.AdMob) {
-                console.warn('AdMob plugin not found. Ads will not be shown.');
-                return;
-            }
-
-            try {
-                // 1. Initialize AdMob
-                await capacitorCommunityAdmob.AdMob.initialize({
-                    // testingDevices: ['YOUR_TEST_DEVICE_HASH'], // Uncomment and add your test device hash if needed
-                    // initializeForConfiguration: true, // Can be useful for more advanced configurations
-                });
-                console.log('AdMob initialized');
-
-                // 2. Show Banner Ad (Optional)
-                // Remove this block if you don't want a banner ad
-                await capacitorCommunityAdmob.AdMob.showBanner({
-                    adId: ADMOB_BANNER_AD_ID,
-                    position: 'BOTTOM_CENTER',
-                    margin: 0,
-                    isTesting: true // Set to true during testing, false for production
-                });
-                console.log('Banner ad shown');
-
-
-                // 3. Prepare Interstitial Ad
-                await capacitorCommunityAdmob.AdMob.prepareInterstitial({
-                    adId: ADMOB_INTERSTITIAL_AD_ID,
-                    isTesting: true // Set to true during testing, false for production
-                });
-                console.log('Interstitial ad prepared');
-
-                // You can prepare other ad types here if needed (e.g., rewarded ads)
-
-            } catch (error) {
-                console.error('Error setting up AdMob:', error);
-                // Handle the error, e.g., by disabling ad-related functionality.
-            }
-        }
-
-        // Function to show Interstitial Ad
-        async function showInterstitialAd() {
-            if (!capacitorCommunityAdmob || !capacitorCommunityAdmob.AdMob) {
-                console.warn('AdMob plugin not found. Cannot show interstitial ad.');
-                return Promise.reject('AdMob not available');
-            }
-            try {
-                const result = await capacitorCommunityAdmob.AdMob.showInterstitial();
-                console.log('Interstitial ad shown:', result);
-                return result; // Resolve with the result
-            } catch (error) {
-                console.error('Error showing interstitial ad:', error);
-                // Optionally, try to re-prepare the ad if it fails to show
-                // await capacitorCommunityAdmob.AdMob.prepareInterstitial({ adId: ADMOB_INTERSTITIAL_AD_ID, isTesting: true });
-                return Promise.reject(error); // Reject with the error
-            }
-        }
-
-        // Initialize AdMob when the device is ready
-        // This listener is important for Capacitor to ensure plugins are available
-        document.addEventListener('deviceready', () => {
-            console.log('Device is ready. Initializing AdMob.');
-            currentUserId = getUniqueUserId(); // Ensure user ID is set
-            setupAds();
-        }, false); // 'false' is important for the capturing phase
-
-
-        // --- Initialization on Page Load ---
-        window.onload = () => {
-            initTheme();
-            loadGamesFromDB();
-            loadProfile(); // Load profile for the current user
-
-            // If 'deviceready' hasn't fired yet (e.g., running in a browser directly)
-            // try to initialize ads. However, plugins might not be available.
-            if (!window.Capacitor) {
-                 console.log("Not in a Capacitor environment. Ads might not work.");
-                 // Call setupAds without deviceready if not in Capacitor
-                 // Note: This might fail if AdMob isn't correctly loaded in a browser context
-                 setupAds();
-            }
-
-            // Ensure initial tab is home
-            switchTab('home');
-        };
-
-        // Ensure correct file name display for profile image
-        document.addEventListener('DOMContentLoaded', () => {
-            const profileImageInput = document.getElementById('profileImage');
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            if (profileImageInput && fileNameDisplay) {
-                profileImageInput.addEventListener('change', function() {
-                    if (this.files && this.files.length > 0) {
-                        fileNameDisplay.textContent = this.files[0].name;
-                    } else {
-                        fileNameDisplay.textContent = 'No file chosen';
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>
